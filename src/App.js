@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import Button from "./components/Button/Button";
+import { Component } from "react";
+import Numbers from "./components/Numbers/Numbers";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const LIMIT = 36;
+
+class App extends Component {
+    state = {
+        numbers: [],
+    };
+
+    generateNumber = () => {
+        const { numbers } = this.state;
+        let randomNumber;
+        do {
+            randomNumber = Math.round(Math.random() * LIMIT);
+        } while (numbers.includes(randomNumber));
+
+        this.setState({ numbers: [...numbers, randomNumber] });
+    };
+
+    deleteNumber = (element) => {
+        const { numbers } = this.state;
+        const newArrray = numbers.filter((el) => el !== element);
+        this.setState({ numbers: newArrray });
+    };
+
+    render() {
+        const { numbers } = this.state;
+        return (
+            <div className="App">
+                <Button disabled={numbers.length === LIMIT + 1} title="Generate" handleClick={this.generateNumber} />
+                <Numbers numbers={numbers} deleteNumber={this.deleteNumber} />
+            </div>
+        );
+    }
 }
 
 export default App;
